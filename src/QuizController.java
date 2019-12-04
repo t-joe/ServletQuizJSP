@@ -1,8 +1,8 @@
 import classess.model.Quiz;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -44,40 +44,39 @@ public class QuizController extends HttpServlet {
             String answer = request.getParameter("answer");
             if (answer != null) {
                 if (answer.equals(String.valueOf(q.getA()[q.getQNum()]))) {
-                    if(qAttempt == 0)
+                    if (qAttempt == 0)
                         score += 10;
-                    else if(qAttempt == 1)
+                    else if (qAttempt == 1)
                         score += 5;
-                    else if(qAttempt == 2)
+                    else if (qAttempt == 2)
                         score += 2;
                     answered = true;
-                }
-                else
+                } else
                     qAttempt++;
                 q.incScore(score);
-                if(qAttempt > 2) {
-                    request.setAttribute("qAnswer", q.getA()[q.getQNum()]);
+                if (qAttempt > 2) {
+                    request.setAttribute("qAnswer", String.valueOf(q.getA()[q.getQNum()]));
                     q.incQNum();
                     qAttempt = 0;
-                }
-                else if(answered)
+                } else if (answered)
                     q.incQNum();
-            }
-            request.getSession().setAttribute("quiz", q);
-            if (q.getQNum() >= 5) {
-                String grade = "";
-                if(q.getScore() >= 45)
-                    grade = "A";
-                else if(q.getScore() >= 35)
-                    grade = "B";
-                else if(q.getScore() >= 25)
-                    grade = "C";
-                else
-                    grade = "NC";
-                request.setAttribute("grade", grade);
-                request.getRequestDispatcher("result.jsp").forward(request, response);
-            } else {
-                request.getRequestDispatcher("quiz.jsp").forward(request, response);
+                request.setAttribute("attempt", String.valueOf(qAttempt));
+                request.getSession().setAttribute("quiz", q);
+                if (q.getQNum() >= 5) {
+                    String grade = "";
+                    if (q.getScore() >= 45)
+                        grade = "A";
+                    else if (q.getScore() >= 35)
+                        grade = "B";
+                    else if (q.getScore() >= 25)
+                        grade = "C";
+                    else
+                        grade = "NC";
+                    request.setAttribute("grade", grade);
+                    request.getRequestDispatcher("result.jsp").forward(request, response);
+                } else {
+                    request.getRequestDispatcher("quiz.jsp").forward(request, response);
+                }
             }
         }
     }

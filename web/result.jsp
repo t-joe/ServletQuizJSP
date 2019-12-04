@@ -14,7 +14,7 @@
 <% Quiz q= (Quiz)session.getAttribute("quiz"); %>
 <fieldset style="width: 600px;">
     <h1>The number quiz</h1>
-    <br>Your current score:  <%=q.getScore()%> <span style="color: red">${grade}</span>
+    <br>Your current score:  <%=q.getScore()%>, Your grade: <span style="color: red"> ${grade}</span>
     <br><br>You have completed the Number Quiz, with a score of ${quiz.getScore()} out of <%=(q.getA().length * 10)%>
 </fieldset>
 </body>
